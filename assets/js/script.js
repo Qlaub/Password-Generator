@@ -16,18 +16,18 @@ const passwordLength = function() {
 }
 
 const promptBuilder = function(characters, length) {
-
   //start of prompt
   let userPrompt = "You would like your password to include"
 
   //build string based on number of choices selected
   if (length === 1) {
     userPrompt += ` ${characters[0]}?`
-    return userPrompt;
+
   } else if (characters.length === 2) {
     userPrompt += ` ${characters[0]} and ${characters[1]}?`
+
   } else {
-    //append each choice one at a time
+    //append each choice except last one at a time
     for (let i = 0; i < length-1; i++) {
       userPrompt += ` ${characters[i]},`
     }
@@ -39,30 +39,35 @@ const promptBuilder = function(characters, length) {
 }
 
 const passwordCharacters = function() {
-  characters = []
+  characterString = []
+  characters = {}
 
   //prompt user for lowercase letters
   let lowercase = window.confirm("Would you like to include lowercase letters?")
   if (lowercase) {
-    characters.push("lowercase letters")
+    characterString.push("lowercase letters")
+    characters.lowercase = true;
   }
 
   //prompt user for uppercase letters
   let uppercase = window.confirm("Would you like to include uppercase letters?")
   if (uppercase) {
-    characters.push("uppercase letters")
+    characterString.push("uppercase letters")
+    characters.uppercase = true;
   }
 
   //prompt user for numbers
   let numeric = window.confirm("Would you like to include numbers?")
   if (numeric) {
-    characters.push("numbers")
+    characterString.push("numbers")
+    characters.numeric = true;
   }
 
   //prompt user for special characters
   let special = window.confirm("Would you like to include special characters?")
   if (special) {
-    characters.push("special characters")
+    characterString.push("special characters")
+    characters.special = true;
   }
 
   if (characters.length === 0) {
@@ -71,7 +76,7 @@ const passwordCharacters = function() {
   }
 
   //confirm the users choices
-  let confirmPrompt = promptBuilder(characters, characters.length);
+  let confirmPrompt = promptBuilder(characterString, characterString.length);
   console.log(confirmPrompt);
 
   let userConfirm = window.confirm(confirmPrompt);
@@ -83,9 +88,35 @@ const passwordCharacters = function() {
   return characters;
 }
 
+const randomNum = function(min, max) {
+  number = Math.floor(Math.random() * (max + 1 - min)) + min;
+  return number;
+}
+
 const generatePassword = function() {
   let length = passwordLength();
-  let characters = passwordCharacters();
+  let userInclusions = passwordCharacters();
+
+  characterString = ""
+  password = ""
+
+  for (let key in userInclusions) {
+    if (key === "lowercase") {
+      characterString += "abcdefghijklmnopqrstuvwxyz";
+    } else if (key === "uppercase") {
+      characterString += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    } else if (key === "numeric") {
+      characterString += "1234567890";
+    } else {
+      characterString += '~`! @#$%^&*()_-+={[}]|:;"' + "\\'<,>.?/"
+    }
+  }
+
+  for (let i=0; i < length; i++) {
+    password += characterString[randomNum(0, characterString.length - 1)];
+  }
+
+  return password;
 }
 
 // Get references to the #generate element
