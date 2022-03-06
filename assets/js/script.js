@@ -11,77 +11,39 @@ const passwordLength = function() {
     //recursively executes function again if not
     return passwordLength();
   }
-
   return length;
 }
 
-const promptBuilder = function(characters, length) {
-  //start of prompt
-  let userPrompt = "You would like your password to include"
-
-  //build string based on number of choices selected
-  if (length === 1) {
-    userPrompt += ` ${characters[0]}?`
-
-  } else if (characters.length === 2) {
-    userPrompt += ` ${characters[0]} and ${characters[1]}?`
-
-  } else {
-    //append each choice except last one at a time
-    for (let i = 0; i < length-1; i++) {
-      userPrompt += ` ${characters[i]},`
-    }
-    //append last choice without comma and with question mark
-    userPrompt += ` and ${characters[length-1]}?`
-  }
-
-  return userPrompt;
-}
-
 const passwordCharacters = function() {
-  characterString = []
   characters = {}
 
   //prompt user for lowercase letters
   let lowercase = window.confirm("Would you like to include lowercase letters?")
   if (lowercase) {
-    characterString.push("lowercase letters")
     characters.lowercase = true;
   }
 
   //prompt user for uppercase letters
   let uppercase = window.confirm("Would you like to include uppercase letters?")
   if (uppercase) {
-    characterString.push("uppercase letters")
     characters.uppercase = true;
   }
 
   //prompt user for numbers
   let numeric = window.confirm("Would you like to include numbers?")
   if (numeric) {
-    characterString.push("numbers")
     characters.numeric = true;
   }
 
   //prompt user for special characters
   let special = window.confirm("Would you like to include special characters?")
   if (special) {
-    characterString.push("special characters")
     characters.special = true;
   }
 
-  //start function over if no choices selected
-  if (characters.length === 0) {
+  //checks if object has no keys, recursively executes function if so
+  if (Object.keys(characters).length === 0) {
     window.alert("Please choose at least one option")
-    return passwordCharacters();
-  }
-
-  //confirm the users choices
-  let confirmPrompt = promptBuilder(characterString, characterString.length);
-  let userConfirm = window.confirm(confirmPrompt);
-
-  //if user doesn't confirm, restart function
-  if (!userConfirm) {
     return passwordCharacters();
   }
 
@@ -109,7 +71,7 @@ const generatePassword = function() {
     } else if (key === "numeric") {
       characterString += "1234567890";
     } else {
-      characterString += '~`! @#$%^&*()_-+={[}]|:;"' + "\\'<,>.?/"
+      characterString += '~`!@#$%^&*()_-+={[}]|:;"\'\\<,>.?/'
     }
   }
 
