@@ -70,6 +70,7 @@ const passwordCharacters = function() {
     characters.special = true;
   }
 
+  //start function over if no choices selected
   if (characters.length === 0) {
     window.alert("Please choose at least one option")
     return passwordCharacters();
@@ -77,9 +78,8 @@ const passwordCharacters = function() {
 
   //confirm the users choices
   let confirmPrompt = promptBuilder(characterString, characterString.length);
-  console.log(confirmPrompt);
-
   let userConfirm = window.confirm(confirmPrompt);
+
   //if user doesn't confirm, restart function
   if (!userConfirm) {
     return passwordCharacters();
@@ -100,6 +100,7 @@ const generatePassword = function() {
   characterString = ""
   password = ""
 
+  //append all characters from each choice user made to characterString
   for (let key in userInclusions) {
     if (key === "lowercase") {
       characterString += "abcdefghijklmnopqrstuvwxyz";
@@ -112,6 +113,7 @@ const generatePassword = function() {
     }
   }
 
+  //iterate through characterString, appending a random character each time to the password
   for (let i=0; i < length; i++) {
     password += characterString[randomNum(0, characterString.length - 1)];
   }
