@@ -13,7 +13,6 @@ const passwordLength = function() {
 }
 
 const passwordCharacters = function() {
-
   //object to store user character choice selections
   characters = {}
 
@@ -58,27 +57,25 @@ const randomNum = function(min, max) {
 }
 
 const generatePassword = function(attempts) {
-
-  //checks if strings aren't empty to help recursive execution
+  //declares variables only on first attempt at password
   if (attempts === 0) {
     chosenLength = passwordLength();
   }
-
   if (attempts === 0) {
     userInclusions = passwordCharacters();
   }
 
-  //number of inclusions user selected
+  //number of inclusions user selected from prompts
   let numberOfChoices = Object.keys(userInclusions).length
 
-  //helps with randomly selecting characters
+  //array to select random characters from
   let randomSelection = []
 
-  //update objects to match users choices
+  //update array to include arrays with included characters from each user selection along with boolean value
+  //boolean acts as check at end of password generation to make sure all types of characters have been included
   for (let key in userInclusions) {
 
-    //updates randomSelection with characters to include and boolean value
-    //boolean is there to check if all have been included at the end
+    //checks against keys selected by user in prompts
     if (key === "lowercase") {
       randomSelection.push(["abcdefghijklmnopqrstuvwxyz", false]);
 
@@ -92,19 +89,19 @@ const generatePassword = function(attempts) {
       randomSelection.push(['~`!@#$%^&*()_-+={[}]|:;"\'\\<,>.?/', false]);
     }
   }
-
+  
   let password = ""
 
-  //randomly generates characters
+  //loops in accordance to length of user password
   for (let i=0; i < chosenLength; i++) {
 
-    //randomly picks a number to index our randomSelection array
+    //randomly select what array of characters to index into
     choice = randomNum(0, numberOfChoices - 1)
 
-    //random index to pick within our randomly chosen array
+    //random index to select character within random array
     let randomCharacterArray = randomNum(0, (randomSelection[choice][0].length - 1))
 
-    //random character from random array within randomSelection array chosen and appended to password
+    //character appended to password
     password += randomSelection[choice][0][randomCharacterArray]
 
     //character choice marked as having been included in password
@@ -116,7 +113,7 @@ const generatePassword = function(attempts) {
   for (let i=0; i < numberOfChoices; i++) {
     if (randomSelection[i][1] === false) {
 
-      //adds one to number of attempts, runs function again
+      //adds one to number of attempts, passes as argument into next attempt
       attempts++
       return generatePassword(attempts);
     }
@@ -131,6 +128,8 @@ var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
+
+  //generatePassword starts at first attempt (added argument)
   var password = generatePassword(0);
   var passwordText = document.querySelector("#password");
 
